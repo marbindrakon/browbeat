@@ -5,6 +5,14 @@
     dest: "/home/stack/{{ ocp_precreate_image_name }}.qcow2.gz"
     checksum: "sha256:{{ ocp_precreate_image_sha256sum|default(omit) }}"
 
+- name: cleanup tempoary image files from failed run
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - "/home/stack/{{ ocp_precreate_image_name }}.qcow2"
+    - "/home/stack/{{ ocp_precreate_image_name }}.raw"
+
 - name: decompress RHCOS image
   command:
     chdir: "/home/stack"
