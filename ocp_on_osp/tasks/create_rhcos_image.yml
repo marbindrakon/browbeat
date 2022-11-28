@@ -24,7 +24,7 @@
     disk_format: "{{ ocp_precreate_image_format }}"
     filename: "/home/stack/{{ ocp_precreate_image_name }}.{{ ocp_precreate_image_format }}"
     is_public: true
-    properties: "{{ ocp_precreate_image_properties }}"
+    properties: "{{ ocp_image_properties|default(omit) }}"
 
 - name: cleanup tempoary image files
   file:
