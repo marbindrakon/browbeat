@@ -49,7 +49,7 @@ platform:
     {% if ocp_image_properties %}
     clusterOSImageProperties:
       {% for key,value in ocp_image_properties.items() %}
-      '- "{{ key }}": "{{ value }}"'
+      - "{{ key }}": "{{ value }}"
       {% endfor %}
     {% endif %}
     externalDNS: ["{{ ansible_dns.nameservers| join('", "') }}"]
