@@ -48,9 +48,7 @@ platform:
     {% endif %}
     {% if ocp_image_properties %}
     clusterOSImageProperties:
-      {% for key,value in ocp_image_properties.items() %}
-      - "{{ key }}": "{{ value }}"
-      {% endfor %}
+{{ ocp_image_properties | to_nice_yaml(indent=6) }}
     {% endif %}
     externalDNS: ["{{ ansible_dns.nameservers| join('", "') }}"]
     octaviaSupport: "1"
