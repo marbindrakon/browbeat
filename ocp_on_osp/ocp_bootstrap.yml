@@ -55,6 +55,10 @@
     - name: create flavors
       include_tasks: tasks/create_flavors.yml
 
+    - name: pre-create rhcos image
+      include_tasks: tasks/create_rhcos_image.yml
+      when: ocp_precreate_image == true
+
     - name: create new overcloudrc file as ocp_venvrc, to be used while setting shiftstack quotas to unlimited
       shell: |
         sed 's/.*OS_COMPUTE_API_VERSION.*/export OS_COMPUTE_API_VERSION=2.79/' /home/stack/overcloudrc > /home/stack/ocp_venvrc

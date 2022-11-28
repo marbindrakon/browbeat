@@ -43,3 +43,17 @@ openshift_prometheus_retention_period: 15d
 openshift_workload_node_flavor: m4.xlarge
 openshift_infra_node_flavor: m4.xlarge
 dittybopper_enable: true
+
+# Pre-create glance image (useful for Ceph or setting image properties)
+ocp_precreate_image: false
+ocp_precreate_image_source_uri: https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.10/4.10.16/rhcos-openstack.x86_64.qcow2.gz
+ocp_precreate_image_name: rhcos-4.10-browbeat
+# SHA256 checksum is optional. If not provided, the image will be downloaded fresh on every run
+ocp_precreate_image_sha256sum: "cd224d5a5ddff1a71cd6cd2c2ae574d06b2790085f1ba0749b3f394fc67ed4c7"
+# Desired format in Glance. Can be either qcow2 or raw. If raw is chosen, the
+# image will be converted to raw before being uploaded to Glance
+ocp_precreate_image_format: qcow2
+
+# Properties to be added to the glance image, works with or without ocp_precreate_image
+ocp_image_properties:
+  hw_vif_multiqueue_enabled: "true"

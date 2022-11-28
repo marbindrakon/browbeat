@@ -1,0 +1,35 @@
+---
+- name: download RHCOS image
+  get_url:
+    url: "{{ ocp_precreate_image_source_uri }}"
+    dest: "/home/stack/{{ ocp_precreate_image_name }}.qcow2.gz"
+    checksum: "sha256:{{ ocp_precreate_image_sha256sum|default(omit) }}"
+
+- name: decompress RHCOS image
+  command:
+    chdir: "/home/stack"
+    cmd: "gunzip -k /home/stack/{{ ocp_precreate_image_name }}.qcow2.gz"
+
+- name: convert image if needed
+  command:
+    chdir: "/home/stack"
+    cmd: "qemu-img convert -f qcow2 {{ ocp_precreate_image_name }}.qcow2 -O raw {{ ocp_precreate_image_name }}.raw"
+  when: ocp_precreate_image_format == "raw"
+
+- name: upload image to glance
+  os_image:
+    cloud: "overcloud"
+    state: present
+    name: "{{ ocp_precreate_image_name }}"
+    disk_format: "{{ ocp_precreate_image_format }}"
+    filename: "/home/stack/{{ ocp_precreate_image_name }}.{{ ocp_precreate_image_format }}"
+    is_public: true
+    properties: "{{ ocp_precreate_image_properties }}"
+
+- name: cleanup tempoary image files
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - "/home/stack/{{ ocp_precreate_image_name }}.qcow2"
+    - "/home/stack/{{ ocp_precreate_image_name }}.raw"
